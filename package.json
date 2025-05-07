@@ -1,0 +1,8 @@
+{
+  "name": "SMStoTG",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "author": "ksmirnov <ksmirnov@azbukavkusa.ru>",
+  "license": "MIT",
+  "packageManager": "yarn@4.9.1"
+}
