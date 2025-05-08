@@ -8,7 +8,10 @@
   "packageManager": "yarn@4.9.1",
   "scripts": {
     "start": "node --experimental-strip-types  src/index.js",
-    "dev": "nodemon --experimental-strip-types  src/index.js"
+    "dev": "nodemon --experimental-strip-types  src/index.js",
+    "build:docker": "docker build --platform linux/amd64 -t sms_bot .",
+    "run:docker": "docker run -p 80:3000 sms_bot",
+    "deploy:docker": "docker login && docker tag sms_bot ksmi/sms_bot:latest && docker push ksmi/sms_bot:latest"
   },
   "dependencies": {
     "@serialport/parser-readline": "^13.0.0",
