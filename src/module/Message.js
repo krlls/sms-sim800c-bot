@@ -27,9 +27,7 @@ export default class Message {
   }
 
   sendToTelegram = () => {
-    console.log('chat', this.chatId)
     this.timerId = setTimeout(() => {
-      console.log('send', this.chatId)
       sendToTelegram(this.chatId, formatSMS(this.phone, this.message))
       this.reset()
     }, 15000)

@@ -1,8 +1,6 @@
 import axios from 'axios'
+import {TELEGRAM_TOKEN} from "../conf/env.js";
 
-const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN
-
-// === ОТПРАВКА В ТЕЛЕГРАМ ===
 async function sendToTelegram(chatId, text) {
   const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
   try {
@@ -11,9 +9,9 @@ async function sendToTelegram(chatId, text) {
       parse_mode: "HTML",
       text
     });
-    console.log('[TELEGRAM] отправлено', chatId);
+    console.log(`[TELEGRAM] Чат: ${chatId} отправлено`);
   } catch (e) {
-    console.error('[TELEGRAM] ошибка:', e.message);
+    console.error(`[TELEGRAM] Чат: ${chatId} ошибка:`, e.message);
   }
 }
 
