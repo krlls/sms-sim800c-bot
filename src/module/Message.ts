@@ -1,4 +1,4 @@
-import {formatSMS, sendToTelegram} from "../utils/sendToTelegram.js";
+import {formatSMS, sendToTelegram} from "../utils/sendToTelegram.ts";
 
 export default class Message {
   chatId = ''

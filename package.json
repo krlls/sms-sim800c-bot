@@ -2,24 +2,22 @@
   "name": "SMStoTG",
   "version": "1.0.0",
   "main": "index.ts",
-  "author": "ksmirnov <ksmirnov@azbukavkusa.ru>",
+  "author": "ksmirnov <krrllsm@gmail.com>",
   "license": "MIT",
   "type": "module",
   "packageManager": "yarn@4.9.1",
   "scripts": {
-    "start": "node --experimental-strip-types  src/index.js",
-    "dev": "nodemon --experimental-strip-types  src/index.js",
+    "start": "node --experimental-strip-types ./src/index.ts",
+    "dev": "node --experimental-strip-types --env-file=.env --watch ./src/index.ts",
+    "publish:docker": "build:docker && deploy:docker",
     "build:docker": "docker build --platform linux/amd64 -t sms_bot .",
     "run:docker": "docker run -p 80:3000 sms_bot",
     "deploy:docker": "docker login && docker tag sms_bot ksmi/sms_bot:latest && docker push ksmi/sms_bot:latest"
   },
   "dependencies": {
-    "@serialport/parser-readline": "^13.0.0",
-    "axios": "^1.9.0",
-    "dotenv": "^16.5.0",
     "serialport": "^13.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "@types/node": "^22.15.17"
   }
 }

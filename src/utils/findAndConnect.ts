@@ -1,5 +1,5 @@
-import {getDevicePatch} from "./getDevicePatch.js";
-import {createConnection} from "./createConnection.js";
+import {getDevicePatch} from "./getDevicePatch.ts";
+import {createConnection} from "./createConnection.ts";
 
 export const findAndConnect = async (chatId, product) => {
   console.log('[Подключение] Поиск', product)

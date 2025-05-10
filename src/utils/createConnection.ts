@@ -1,11 +1,11 @@
 import { SerialPort } from 'serialport'
 import { ReadlineParser } from '@serialport/parser-readline'
-import Message from "../module/Message.js";
-import {decodeUCS2} from "./decodeUCS2.js";
-import {extractUCS2Phone} from "./extractUCS2Phone.js";
-import {initSIM800} from "../module/initSIM800.js";
-import {findAndConnect} from "./findAndConnect.js";
-import {clients } from "./generateClients.js";
+import Message from "../module/Message.ts";
+import {decodeUCS2} from "./decodeUCS2.ts";
+import {extractUCS2Phone} from "./extractUCS2Phone.ts";
+import {initSIM800} from "../module/initSIM800.ts";
+import {findAndConnect} from "./findAndConnect.ts";
+import {clients } from "./generateClients.ts";
 
 export const createConnection = (chatId, path) => {
   let waitingForSMS = false;

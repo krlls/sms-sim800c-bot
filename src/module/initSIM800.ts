@@ -1,5 +1,5 @@
 // === НАСТРОЙКА МОДУЛЯ ===
-import {sendAT} from "../utils/sendAT.js";
+import {sendAT} from "../utils/sendAT.ts";
 
 async function initSIM800(port) {
   await sendAT('AT',port);             // Проверка связи
