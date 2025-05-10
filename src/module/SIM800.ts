@@ -1,9 +1,11 @@
 import { SerialPort } from 'serialport'
 
 export class SIM800 {
+  name: string
   port: SerialPort
 
-  constructor(port: SerialPort) {
+  constructor(name: string, port: SerialPort) {
+    this.name = name
     this.port = port
   }
 
@@ -32,7 +34,7 @@ export class SIM800 {
   }
 
   log(message: string) {
-    console.log(`[${this.port.path}] ${message}`);
+    console.log(`[${this.name}] ${message}`);
   }
 
 }

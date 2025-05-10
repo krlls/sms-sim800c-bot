@@ -13,9 +13,9 @@ async function sendToTelegram(chatId, text) {
       })
     });
 
-    console.log(`[TELEGRAM] Чат: ${chatId} отправлено`);
+    console.log(`[Telegram] [${chatId}] Отправлено`);
   } catch (e) {
-    console.error(`[TELEGRAM] Чат: ${chatId} ошибка:`, e.message);
+    console.error(`[Telegram] [${chatId}] Ошибка:`, e.message);
   }
 }
 

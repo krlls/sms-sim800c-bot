@@ -11,12 +11,12 @@ import { sendToTelegram } from './sendToTelegram.ts'
 
 export const createConnection = (chatId, path) => {
   let waitingForSMS = false;
-  const message = new Message(chatId)
-
   const port = new SerialPort({ path, baudRate: 9600 });
   const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }));
-  const device = new SIM800(port)
-  const task = new Task(port.path)
+  const deviceName = port.path
+  const message = new Message(deviceName, chatId)
+  const device = new SIM800(deviceName, port)
+  const task = new Task(deviceName)
 
   parser.on('data', async line => {
     if (line.startsWith('+CMT:')) {
@@ -26,7 +26,6 @@ export const createConnection = (chatId, path) => {
       message.setPhone(decodedPhone)
 
     } else if (waitingForSMS) {
-      console.log(`[${path}]`, 'Сообщение принято, ждем 15 сек')
       message.appendMessage(decodeUCS2(line))
       message.sendToTelegram()
       waitingForSMS = false
@@ -34,7 +33,7 @@ export const createConnection = (chatId, path) => {
   });
 
   port.on('open', async () => {
-    console.log('[PORT] открыт:', path);
+    console.log(`[${deviceName}] Порт открыт`);
     await device.init()
     task.setTask('0 5 * * *', () => device.clearSMSMemory())
 
@@ -42,11 +41,11 @@ export const createConnection = (chatId, path) => {
   });
 
   port.on('error', function(err) {
-    console.log(`[${path}] Error: `, err.message)
+    console.log(`[${deviceName}] Error: `, err.message)
   })
 
   port.on('close', function(err) {
-    console.log(`[${path}] Отключен`)
+    console.log(`[${deviceName}] Отключен`)
 
     task.clearTasks()
 
