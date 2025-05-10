@@ -3,9 +3,10 @@ import { ReadlineParser } from '@serialport/parser-readline'
 import Message from "../module/Message.ts";
 import {decodeUCS2} from "./decodeUCS2.ts";
 import {extractUCS2Phone} from "./extractUCS2Phone.ts";
-import {initSIM800} from "../module/initSIM800.ts";
 import {findAndConnect} from "./findAndConnect.ts";
 import {clients } from "./generateClients.ts";
+import { SIM800 } from '../module/SIM800.ts'
+import { Task } from '../module/Task.ts'
 
 export const createConnection = (chatId, path) => {
   let waitingForSMS = false;
@@ -13,6 +14,8 @@ export const createConnection = (chatId, path) => {
 
   const port = new SerialPort({ path, baudRate: 9600 });
   const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }));
+  const device = new SIM800(port)
+  const task = new Task(port.path)
 
   parser.on('data', async line => {
     if (line.startsWith('+CMT:')) {
@@ -31,7 +34,8 @@ export const createConnection = (chatId, path) => {
 
   port.on('open', async () => {
     console.log('[PORT] открыт:', path);
-    await initSIM800(port);
+    await device.init()
+    task.setTask('0 5 * * *', () => device.clearSMSMemory())
   });
 
   port.on('error', function(err) {
@@ -40,6 +44,8 @@ export const createConnection = (chatId, path) => {
 
   port.on('close', function(err) {
     console.log(`[${path}] Отключен`)
+
+    task.clearTasks()
 
     const client = clients.find((c) => c.chatId === chatId)
 

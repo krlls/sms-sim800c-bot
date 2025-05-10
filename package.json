@@ -15,6 +15,7 @@
     "deploy:docker": "docker login && docker tag sms_bot ksmi/sms_bot:latest && docker push ksmi/sms_bot:latest"
   },
   "dependencies": {
+    "node-cron": "^4.0.0",
     "serialport": "^13.0.0"
   },
   "devDependencies": {
