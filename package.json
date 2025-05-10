@@ -1,8 +1,8 @@
 {
-  "name": "sms-to-tg",
+  "name": "sms-sim800c-bot",
   "version": "1.0.0",
   "main": "index.ts",
-  "author": "ksmirnov <krrllsm@gmail.com>",
+  "author": "Kirill Smirnov <krrllsm@gmail.com>",
   "license": "MIT",
   "type": "module",
   "packageManager": "yarn@4.9.1",
