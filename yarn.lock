@@ -195,17 +195,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"SMStoTG@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "SMStoTG@workspace:."
-  dependencies:
-    "@types/node": "npm:^22.15.17"
-    node-cron: "npm:^4.0.0"
-    node-sms-pdu: "npm:^0.3.0"
-    serialport: "npm:^13.0.0"
-  languageName: unknown
-  linkType: soft
-
 "abbrev@npm:^3.0.0":
   version: 3.0.1
   resolution: "abbrev@npm:3.0.1"
@@ -859,6 +848,17 @@ __metadata:
   checksum: 10c0/a16775323e1404dd43fabafe7460be13a471e021637bc7889468eb45ce6a6b207261f454e4e530a19500cc962c4cc5348583520843b363f4193cee5c00e1e539
   languageName: node
   linkType: hard
+
+"sms-to-tg@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "sms-to-tg@workspace:."
+  dependencies:
+    "@types/node": "npm:^22.15.17"
+    node-cron: "npm:^4.0.0"
+    node-sms-pdu: "npm:^0.3.0"
+    serialport: "npm:^13.0.0"
+  languageName: unknown
+  linkType: soft
 
 "socks-proxy-agent@npm:^8.0.3":
   version: 8.0.5
