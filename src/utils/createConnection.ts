@@ -7,6 +7,7 @@ import {findAndConnect} from "./findAndConnect.ts";
 import {clients } from "./generateClients.ts";
 import { SIM800 } from '../module/SIM800.ts'
 import { Task } from '../module/Task.ts'
+import { sendToTelegram } from './sendToTelegram.ts'
 
 export const createConnection = (chatId, path) => {
   let waitingForSMS = false;
@@ -36,6 +37,8 @@ export const createConnection = (chatId, path) => {
     console.log('[PORT] открыт:', path);
     await device.init()
     task.setTask('0 5 * * *', () => device.clearSMSMemory())
+
+    if (process.env.NODE_ENV === 'production') sendToTelegram(chatId, '✅ Устройство подключено')
   });
 
   port.on('error', function(err) {
@@ -46,6 +49,8 @@ export const createConnection = (chatId, path) => {
     console.log(`[${path}] Отключен`)
 
     task.clearTasks()
+
+    if (process.env.NODE_ENV === 'production') sendToTelegram(chatId, '❌ Устройство отключено')
 
     const client = clients.find((c) => c.chatId === chatId)
 
