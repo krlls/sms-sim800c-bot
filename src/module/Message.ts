@@ -1,5 +1,4 @@
 import {formatSMS, sendToTelegram} from "../utils/sendToTelegram.ts";
-import { isLatinCharactersOnly } from '../utils/isLatinCharactersOnly.ts'
 
 export default class Message {
   name: string
@@ -28,27 +27,12 @@ export default class Message {
 
   appendMessage(message) {
     this.messageBuffer.push(message)
+    this.log('Сообщение принято')
   }
 
   sendToTelegram = () => {
-    const send = () => {
-      sendToTelegram(this.chatId, formatSMS(this.phone, this.messageBuffer.join('')))
-      this.reset()
-    }
-
-    const lastStr = this.messageBuffer.at(-1)
-    const limit = isLatinCharactersOnly(lastStr) ? 150 : 67
-
-    if (lastStr.length < limit) {
-      this.log('Сообщение принято')
-      this.stopSending()
-      send()
-      return
-    }
-
-
-    this.log(`Сообщение принято, ждем ${this.waitPartTime / 1000} сек`)
-    this.timerId = setTimeout(send, this.waitPartTime)
+    sendToTelegram(this.chatId, formatSMS(this.phone, this.messageBuffer.join('')))
+    this.reset()
   }
 
   stopSending() {

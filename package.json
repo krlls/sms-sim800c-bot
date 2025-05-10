@@ -1,5 +1,5 @@
 {
-  "name": "SMStoTG",
+  "name": "sms-to-tg",
   "version": "1.0.0",
   "main": "index.ts",
   "author": "ksmirnov <krrllsm@gmail.com>",
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "node-cron": "^4.0.0",
+    "node-sms-pdu": "^0.3.0",
     "serialport": "^13.0.0"
   },
   "devDependencies": {

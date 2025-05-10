@@ -13,8 +13,8 @@ export class SIM800 {
     await this.sendAT('AT');             // Проверка связи
     await this.sendAT('ATE0');           // Выключить эхо
     await this.sendAT('AT+CSCS="UCS2"'); // Ставим кодировку UCS2
-    await this.sendAT('AT+CMGF=1');      // Текстовый режим
-    await this.sendAT('AT+CNMI=2,2,0,0,0'); // Автоотправка входящих
+    await this.sendAT('AT+CMGF=0');      // Текстовый режим
+    await this.sendAT('AT+CNMI=2,1,0,0,0'); // Автоотправка входящих
     this.log('Готов к приему SMS')
   }
 
@@ -26,6 +26,10 @@ export class SIM800 {
     this.log('Список сообщений очищен')
   }
 
+  async getMessage(smti: string) {
+    await this.sendAT(`AT+CMGR=${smti.split(',')[1]}`)
+  }
+
   private sendAT(command: string) {
     return new Promise((resolve) => {
       this.port.write(command + '\r');
@@ -33,7 +37,7 @@ export class SIM800 {
     });
   }
 
-  log(message: string) {
+  private log(message: string) {
     console.log(`[${this.name}] ${message}`);
   }
 

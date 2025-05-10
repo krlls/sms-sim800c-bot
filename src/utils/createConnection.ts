@@ -1,8 +1,8 @@
 import { SerialPort } from 'serialport'
 import { ReadlineParser } from '@serialport/parser-readline'
+import pdu  from 'node-sms-pdu'
+
 import Message from "../module/Message.ts";
-import {decodeUCS2} from "./decodeUCS2.ts";
-import {extractUCS2Phone} from "./extractUCS2Phone.ts";
 import {findAndConnect} from "./findAndConnect.ts";
 import {clients } from "./generateClients.ts";
 import { SIM800 } from '../module/SIM800.ts'
@@ -18,21 +18,31 @@ export const createConnection = (chatId, path) => {
   const device = new SIM800(deviceName, port)
   const task = new Task(deviceName)
 
-  parser.on('data', async line => {
-    if (line.startsWith('+CMT:')) {
+  parser.on('data', async (line: string) => {
+    if(line.startsWith('+CMTI:')) return device.getMessage(line)
+
+    if (line.startsWith('+CMGR:')) {
       waitingForSMS = true;
+      return
+    }
 
-      const decodedPhone = decodeUCS2(extractUCS2Phone(line))
-      message.setPhone(decodedPhone)
+    if (waitingForSMS) {
+      const sms = pdu.parse(line)
 
-    } else if (waitingForSMS) {
-      message.appendMessage(decodeUCS2(line))
-      message.sendToTelegram()
+      message.setPhone(sms.origination)
+      message.appendMessage(sms.text)
+
+      if (!sms.concat || sms.concat.total <= message.messageBuffer.length) {
+        message.sendToTelegram()
+      }
+
       waitingForSMS = false
     }
+
   });
 
   port.on('open', async () => {
+
     console.log(`[${deviceName}] Порт открыт`);
     await device.init()
     task.setTask('0 5 * * *', () => device.clearSMSMemory())
@@ -44,7 +54,7 @@ export const createConnection = (chatId, path) => {
     console.log(`[${deviceName}] Error: `, err.message)
   })
 
-  port.on('close', function(err) {
+  port.on('close', () => {
     console.log(`[${deviceName}] Отключен`)
 
     task.clearTasks()

@@ -201,6 +201,7 @@ __metadata:
   dependencies:
     "@types/node": "npm:^22.15.17"
     node-cron: "npm:^4.0.0"
+    node-sms-pdu: "npm:^0.3.0"
     serialport: "npm:^13.0.0"
   languageName: unknown
   linkType: soft
@@ -708,6 +709,13 @@ __metadata:
   bin:
     node-gyp: bin/node-gyp.js
   checksum: 10c0/bd8d8c76b06be761239b0c8680f655f6a6e90b48e44d43415b11c16f7e8c15be346fba0cbf71588c7cdfb52c419d928a7d3db353afc1d952d19756237d8f10b9
+  languageName: node
+  linkType: hard
+
+"node-sms-pdu@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "node-sms-pdu@npm:0.3.0"
+  checksum: 10c0/252511af59fb2ef849ce9ecd1322948d99f4779c51e1e93b4fbc284a61b8398d24f6fd0d5f3c66ad976dda6f9379d62d42b2dc9ad7559367fb88480eed56db16
   languageName: node
   linkType: hard
 
