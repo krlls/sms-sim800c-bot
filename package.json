@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node --experimental-strip-types ./src/index.ts",
     "dev": "node --experimental-strip-types --env-file=.env --watch ./src/index.ts",
-    "publish:docker": "yarn build:docker && yarn deploy:docker",
+    "build-and-deploy:docker": "yarn build:docker && yarn deploy:docker",
     "build:docker": "docker build --platform linux/amd64 -t sms_bot .",
     "run:docker": "docker run -p 80:3000 sms_bot",
     "deploy:docker": "docker login && docker tag sms_bot ksmi/sms_bot:latest && docker push ksmi/sms_bot:latest"

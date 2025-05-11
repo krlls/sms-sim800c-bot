@@ -8,5 +8,5 @@ WORKDIR /app
 RUN corepack enable
 RUN yarn install --frozen-lockfile
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 CMD ["yarn", "start"]
