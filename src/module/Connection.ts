@@ -13,21 +13,23 @@ import { getPhoneFromClip } from '../utils/getPhoneFromClip.ts'
 
 export class Connection {
   deviceName: string
-  port: SerialPort;
+  productId: string
   chatId: string;
+  port: SerialPort;
   message: Message
   device: SIM800
   task: Task
 
-  constructor(chatId: string) {
+  constructor(chatId: string, productId: string) {
     this.chatId = chatId
+    this.productId = productId
   }
 
   async init() {
-    const client = clients.find((c) => c.chatId === this.chatId)
+    const client = clients.find(({ chatId, productId }) => chatId === this.chatId && productId === this.productId)
     if (!client) return
 
-    const patch = await findDevicePatch(this.chatId, client.device)
+    const patch = await findDevicePatch(this.chatId, client.productId)
     this.deviceName = patch
 
     this.connect(this.chatId, patch)
