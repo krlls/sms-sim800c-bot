@@ -8,9 +8,9 @@ import {clients } from "./generateClients.ts";
 import { SIM800 } from '../module/SIM800.ts'
 import { Task } from '../module/Task.ts'
 import { sendToTelegram } from './sendToTelegram.ts'
+import { isPDU } from './isPDU.ts'
 
 export const createConnection = (chatId, path) => {
-  let waitingForSMS = false;
   const port = new SerialPort({ path, baudRate: 9600 });
   const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }));
   const deviceName = port.path
@@ -19,14 +19,10 @@ export const createConnection = (chatId, path) => {
   const task = new Task(deviceName)
 
   parser.on('data', async (line: string) => {
-    if(line.startsWith('+CMTI:')) return device.getMessage(line)
+    if(line.startsWith('+CMTI:')) return device.requestMessage(line)
+    if (line.startsWith('+CMGR:')) return
 
-    if (line.startsWith('+CMGR:')) {
-      waitingForSMS = true;
-      return
-    }
-
-    if (waitingForSMS) {
+    if(isPDU(line)) {
       const sms = pdu.parse(line)
 
       message.setPhone(sms.origination)
@@ -35,10 +31,7 @@ export const createConnection = (chatId, path) => {
       if (!sms.concat || sms.concat.total <= message.messageBuffer.length) {
         message.sendToTelegram()
       }
-
-      waitingForSMS = false
     }
-
   });
 
   port.on('open', async () => {

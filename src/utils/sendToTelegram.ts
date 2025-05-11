@@ -22,9 +22,9 @@ async function sendToTelegram(chatId, text) {
 function formatSMS(phone, text) {
   return `
 <b>📩</b> <code>${phone}</code>
-<b></b>
+
 ${text}
-`
+`.replace(/((\r?\n)|\r){3,}/g, '\n\n');
 }
 
 export { sendToTelegram, formatSMS }

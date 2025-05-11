@@ -26,7 +26,7 @@ export class SIM800 {
     this.log('Список сообщений очищен')
   }
 
-  async getMessage(smti: string) {
+  async requestMessage(smti: string) {
     await this.sendAT(`AT+CMGR=${smti.split(',')[1]}`)
   }
 
