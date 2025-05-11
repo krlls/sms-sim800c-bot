@@ -33,6 +33,7 @@ export class SIM800 {
 
   async rejectCall() {
     await this.sendAT('ATH');
+    this.log('Вызов отклонен')
   }
 
   private sendAT(command: string) {
@@ -45,5 +46,4 @@ export class SIM800 {
   private log(message: string) {
     console.log(`[${this.name}] ${message}`);
   }
-
 }

@@ -24,8 +24,10 @@ export const createConnection = (chatId, path) => {
     if (DEBUG) console.log(`[DEBUG] [${deviceName}] ${line}`)
 
     if(line.startsWith('+CLIP')) {
+      const phone = getPhoneFromClip(line)
+      console.log(`[${deviceName}] Звонок с ${phone}`);
       device.rejectCall()
-      return sendToTelegram(chatId, formatPhone(getPhoneFromClip(line)))
+      return sendToTelegram(chatId, formatPhone(phone))
     }
 
     if(line.startsWith('+CMTI:')) return device.requestMessage(line)
