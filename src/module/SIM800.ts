@@ -13,8 +13,9 @@ export class SIM800 {
     await this.sendAT('AT');             // Проверка связи
     await this.sendAT('ATE0');           // Выключить эхо
     await this.sendAT('AT+CSCS="UCS2"'); // Ставим кодировку UCS2
-    await this.sendAT('AT+CMGF=0');      // Текстовый режим
+    await this.sendAT('AT+CMGF=0');      // PDU режим
     await this.sendAT('AT+CNMI=2,1,0,0,0'); // Автоотправка входящих
+    await this.sendAT('AT+CLIP=1');      // Уведомлять о входящих
     this.log('Готов к приему SMS')
   }
 
@@ -28,6 +29,10 @@ export class SIM800 {
 
   async requestMessage(smti: string) {
     await this.sendAT(`AT+CMGR=${smti.split(',')[1]}`)
+  }
+
+  async rejectCall() {
+    await this.sendAT('ATH');
   }
 
   private sendAT(command: string) {

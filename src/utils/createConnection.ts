@@ -7,8 +7,10 @@ import {findAndConnect} from "./findAndConnect.ts";
 import {clients } from "./generateClients.ts";
 import { SIM800 } from '../module/SIM800.ts'
 import { Task } from '../module/Task.ts'
-import { sendToTelegram } from './sendToTelegram.ts'
+import { formatPhone, sendToTelegram } from './sendToTelegram.ts'
 import { isPDU } from './isPDU.ts'
+import { DEBUG } from '../conf/env.ts'
+import { getPhoneFromClip } from './getPhoneFromClip.ts'
 
 export const createConnection = (chatId, path) => {
   const port = new SerialPort({ path, baudRate: 9600 });
@@ -19,8 +21,14 @@ export const createConnection = (chatId, path) => {
   const task = new Task(deviceName)
 
   parser.on('data', async (line: string) => {
+    if (DEBUG) console.log(`[DEBUG] [${deviceName}] ${line}`)
+
+    if(line.startsWith('+CLIP')) {
+      device.rejectCall()
+      return sendToTelegram(chatId, formatPhone(getPhoneFromClip(line)))
+    }
+
     if(line.startsWith('+CMTI:')) return device.requestMessage(line)
-    if (line.startsWith('+CMGR:')) return
 
     if(isPDU(line)) {
       const sms = pdu.parse(line)
@@ -31,12 +39,13 @@ export const createConnection = (chatId, path) => {
       if (!sms.concat || sms.concat.total <= message.messageBuffer.length) {
         message.sendToTelegram()
       }
+      return
     }
   });
 
   port.on('open', async () => {
-
     console.log(`[${deviceName}] Порт открыт`);
+
     await device.init()
     task.setTask('0 5 * * *', () => device.clearSMSMemory())
 

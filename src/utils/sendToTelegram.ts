@@ -1,4 +1,5 @@
 import {TELEGRAM_TOKEN} from "../conf/env.ts";
+import { phoneFormatter } from './phoneFormatter.ts'
 
 async function sendToTelegram(chatId, text) {
   const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
@@ -21,10 +22,14 @@ async function sendToTelegram(chatId, text) {
 
 function formatSMS(phone, text) {
   return `
-<b>📩</b> <code>${phone}</code>
+<b>📩</b> ${isNaN(phone) ? phone : phoneFormatter(phone, ' (NNN) NNN-NN-NN')}
 
 ${text}
 `.replace(/((\r?\n)|\r){3,}/g, '\n\n');
+}
+
+export function formatPhone(phone) {
+  return `📲 Входящий вызов от ${phoneFormatter(phone, ' (NNN) NNN-NN-NN')}`
 }
 
 export { sendToTelegram, formatSMS }
