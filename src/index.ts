@@ -1,7 +1,9 @@
-import {findAndConnect} from "./utils/findAndConnect.ts";
 import {clients} from "./utils/generateClients.ts";
+import { Connection } from './module/Connection.ts'
 
 
 console.log('[CLIENTS]', clients)
 
-clients.map(({ chatId, device }) => findAndConnect(chatId, device))
+export const connections: Connection[] = clients.map(({ chatId }) => new Connection(chatId))
+
+connections.forEach((connection)=> connection.init())
