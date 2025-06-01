@@ -29,7 +29,7 @@ export class Connection {
     const client = clients.find(({ chatId, productId }) => chatId === this.chatId && productId === this.productId)
     if (!client) return
 
-    const patch = await findDevicePatch(this.chatId, client.productId)
+    const patch = await findDevicePatch({ productId: client.productId, patch: client.patch })
     this.deviceName = patch
 
     this.connect(this.chatId, patch)
@@ -96,9 +96,11 @@ export class Connection {
     console.log(`[${this.deviceName}] Отключен`)
 
     this.task.clearTasks()
+    this.port.destroy()
 
     if (process.env.NODE_ENV === 'production') sendToTelegram(this.chatId, '❌ Устройство отключено')
 
+    await delay(1000)
     await this.init()
   }
 
